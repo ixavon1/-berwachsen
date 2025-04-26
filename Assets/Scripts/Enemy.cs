@@ -5,9 +5,10 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     Rigidbody2D rb;
-    public float speed;
+    public float speed, accel;
     public Transform player;
     public float range;
+    Vector2 goal;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,16 +16,18 @@ public class Enemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Vector2 direction = player.position - transform.position;
         if (direction.magnitude < range)
         {
-            rb.velocity = direction.normalized * speed;
+            goal = direction.normalized * speed;
         }
         else
         {
-            rb.velocity = Vector2.zero;
+            goal = Vector2.zero;
         }
+
+        rb.velocity = Vector2.MoveTowards(rb.velocity, goal, accel * Time.fixedDeltaTime);
     }
 }

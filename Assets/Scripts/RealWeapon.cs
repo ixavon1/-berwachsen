@@ -5,7 +5,7 @@ using UnityEngine;
 public class RealWeapon : MonoBehaviour
 {
     public float moveSpeed;
-    public Transform goal;
+    public Transform goal, player;
 
     private void FixedUpdate()
     {
@@ -17,7 +17,7 @@ public class RealWeapon : MonoBehaviour
         Debug.Log("Hit " + other.name);
         if (other.CompareTag("Enemy"))
         {
-            other.GetComponent<Health>().TakeDamage(1);
+            other.GetComponent<Health>().TakeDamage(1, player.position);
         }
     }
 }
