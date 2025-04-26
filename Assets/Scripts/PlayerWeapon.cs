@@ -7,6 +7,7 @@ using static UnityEditor.PlayerSettings;
 
 public class PlayerWeapon : MonoBehaviour
 {
+    public Player player;
     public Animator playerAnim;
     public SpriteRenderer playerRenderer;
     public Rigidbody2D playerRb;
@@ -64,6 +65,8 @@ public class PlayerWeapon : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            swingSource.pitch = Random.Range(0.8f, 1.2f);
+            swingSource.Play();
             weaponGoal.transform.localPosition = new(defaultOffset.x + attackOffset, defaultOffset.y);
             CancelInvoke("ResetAttack");
             Invoke("ResetAttack", attackLength);
@@ -72,6 +75,7 @@ public class PlayerWeapon : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1) && shoveCooldownTimer <= 0)
         {
+            player.hitCooldown = 1;
             shoveSource.pitch = Random.Range(0.9f, 1.1f);
             shoveSource.Play();
             shoveCooldownTimer = shoveCooldown;
@@ -96,7 +100,7 @@ public class PlayerWeapon : MonoBehaviour
         int currentDir = 0;
         float closestAngle = 360;
         float angle = transform.eulerAngles.z + 90;
-        if (Mathf.Abs(Mathf.DeltaAngle(lastAngle, angle)) < 3) return lastDir;
+        if (Mathf.Abs(Mathf.DeltaAngle(lastAngle, angle)) < 6) return lastDir;
 
         int sum = 45;
         for (int i = 0; Mathf.Abs(i) < 360; i += sum)

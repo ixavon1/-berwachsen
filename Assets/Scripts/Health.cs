@@ -5,7 +5,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     public int maxHealth = 10;
-    private int currentHealth;
+    public int currentHealth;
 
     public GameObject dad;
     public SpriteRenderer sr;
@@ -20,6 +20,12 @@ public class Health : MonoBehaviour
     public GameObject deathObject;
 
     public ParticleSystem ps;
+
+    public int id;
+
+    public Player player;
+    public GameObject death;
+    bool dying;
 
     void Start()
     {
@@ -52,6 +58,22 @@ public class Health : MonoBehaviour
 
     void Die()
     {
+        if (id != -1 && player)
+        {
+            player.plantAmts[id]++;
+            player.plantTexts[id].text = "x" + player.plantAmts[id];
+            //player.plantTexts[id].color = Color.white;
+        }
+
+        if (dying) return;
+        if (death)
+        {
+            death.GetComponent<Animator>().Play("fadeout");
+            death.GetComponent<AudioSource>().Play();
+            Invoke("ResetPlayer", 1);
+            dying = true;
+            return;
+        }
         if (deathObject)
         {
             GameObject go = Instantiate(deathObject, transform.position, Quaternion.identity);
@@ -60,6 +82,12 @@ public class Health : MonoBehaviour
         }
         if (dad) Destroy(dad);
         Destroy(gameObject);
+    }
+
+    void ResetPlayer()
+    {
+        player.ResetMe();
+        source.pitch = 1;
     }
 
     private void Unflash() { sr.material = basicMat; }
