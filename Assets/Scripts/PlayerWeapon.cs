@@ -9,6 +9,7 @@ public class PlayerWeapon : MonoBehaviour
     public SpriteRenderer weaponSr;
     public Transform weaponObject, playerObject, weaponGoal;
     Vector2 defaultOffset;
+    public BoxCollider2D weaponCollider;
 
     public float attackLength, attackOffset;
 
@@ -37,8 +38,12 @@ public class PlayerWeapon : MonoBehaviour
             weaponGoal.transform.localPosition = new(defaultOffset.x + attackOffset, defaultOffset.y);
             CancelInvoke("ResetAttack");
             Invoke("ResetAttack", attackLength);
+            weaponCollider.enabled = true;
         }
     }
 
-    private void ResetAttack() { weaponGoal.transform.localPosition =  defaultOffset; }
+    private void ResetAttack() { 
+        weaponGoal.transform.localPosition =  defaultOffset;
+        weaponCollider.enabled = false;
+    }
 }
